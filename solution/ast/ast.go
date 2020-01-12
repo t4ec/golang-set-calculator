@@ -1,11 +1,11 @@
 package ast
 
 import (
-	"fmt"
+	"solution/math"
 )
 
+// Operation types
 const (
-	// Operation types
 	UNION        = "SUM"
 	DIFFERENCE   = "DIF"
 	INTERSECTION = "INT"
@@ -21,26 +21,25 @@ type ASTOperatorNode struct {
 }
 
 func (n ASTOperatorNode) Evaluate() []int {
-	fmt.Printf("Evaluate operation %v\n", n.Operation)
 	switch n.Operation {
 	case UNION: // TODO
-		result := []int{}
+		childrenSets := [][]int{}
 		for _, child := range n.Children {
-			result = append(result, child.Evaluate()...)
+			childrenSets = append(childrenSets, child.Evaluate())
 		}
-		return result
+		return math.Union(childrenSets)
 	case INTERSECTION: // TODO
-		result := []int{}
+		childrenSets := [][]int{}
 		for _, child := range n.Children {
-			result = append(result, child.Evaluate()...)
+			childrenSets = append(childrenSets, child.Evaluate())
 		}
-		return result
+		return math.Intersection(childrenSets)
 	case DIFFERENCE: // TODO
-		result := []int{}
+		childrenSets := [][]int{}
 		for _, child := range n.Children {
-			result = append(result, child.Evaluate()...)
+			childrenSets = append(childrenSets, child.Evaluate())
 		}
-		return result
+		return math.Difference(childrenSets)
 	default: // TODO error handling
 		return []int{}
 	}
@@ -52,6 +51,5 @@ type ASTValueNode struct {
 }
 
 func (n ASTValueNode) Evaluate() []int {
-	fmt.Printf("Evaluate value %v\n", n.Value)
 	return n.Value
 }
