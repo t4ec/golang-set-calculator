@@ -32,7 +32,9 @@ $ cat c.txt
 
 ### 2. Run binary with expression as an argument
 
-    ./solution [ SUM [ DIF a.txt b.txt c.txt ] [ INT b.txt c.txt ] ]
+```
+./solution [ SUM [ DIF a.txt b.txt c.txt ] [ INT b.txt c.txt ] ]
+```
 
 Expected output:
 ```
