@@ -2,9 +2,14 @@
 
 package math
 
-import (
-// "fmt"
-)
+// Order sets: first element of 1st set should be <= then first element of 2nd set.
+// This allows us to keep order after we do the math without additional sorting.
+func alignOrderedSets(lhs []int, rhs []int) ([]int, []int) {
+	if lhs[0] > rhs[0] {
+		return rhs, lhs
+	}
+	return lhs, rhs
+}
 
 func Union(sets [][]int) []int {
 	if len(sets) == 1 {
@@ -15,120 +20,144 @@ func Union(sets [][]int) []int {
 	for _, set := range sets {
 		if len(result) == 0 {
 			result = set
+			continue
 		}
 		if len(set) == 0 {
 			continue
 		}
 
-		// Keep ordered sets order so we don't have to sort them later
-		lhs, rhs := result, set
-		if lhs[0] > rhs[0] {
-			lhs, rhs = set, result
-		}
-		lhsBuffer := lhs
+		lhs, rhs := alignOrderedSets(result, set)
 
 		i := 0
 		j := 0
+		buffer := []int{}
 		for {
-			// If left-hand-side pointer is out of array we just append the rest of rhs
-			// since they are sorted and arranged to each other. And we unite them.
-			if i >= len(lhs) && j < len(rhs) {
-				lhsBuffer = append(lhsBuffer, rhs[j:]...)
-				break
-			} else if j >= len(rhs) && i < len(lhs) {
-				break
-			} else if i >= len(lhs) && j >= len(rhs) {
+			if i >= len(lhs) || j >= len(rhs) {
 				break
 			}
 
 			if lhs[i] < rhs[j] {
+				buffer = append(buffer, lhs[i])
 				i++
-				continue
 			} else if lhs[i] == rhs[j] {
+				buffer = append(buffer, lhs[i])
 				i++
 				j++
-				continue
 			} else {
-				lhsBuffer = append(lhsBuffer, rhs[j])
-				i++
+				buffer = append(buffer, rhs[j])
 				j++
-				continue
 			}
 		}
-		result = lhsBuffer
+
+		for {
+			if i >= len(lhs) {
+				break
+			}
+			buffer = append(buffer, lhs[i])
+			i++
+		}
+
+		for {
+			if j >= len(rhs) {
+				break
+			}
+			buffer = append(buffer, rhs[j])
+			j++
+		}
+		result = buffer
 	}
 	return result
 }
 
 func Intersection(sets [][]int) []int {
+	if len(sets) == 1 {
+		return sets[0]
+	}
+
 	result := []int{}
-	for setIndex, set := range sets {
-		// intersection with empty set
+	for setIn, set := range sets {
 		if len(set) == 0 {
 			return []int{}
 		}
 
-		// initialize result with first set
-		if setIndex == 0 {
+		if setIn == 0 {
 			result = set
 			continue
 		}
 
-		// Place ordered sets in order so we don't have to sort them later
-		lhs, rhs := result, set
-		if lhs[0] > rhs[0] {
-			lhs, rhs = rhs, lhs
-		}
-		resultBuffer := []int{}
-		for _, lhsVal := range lhs {
-			if lhsVal < rhs[0] {
-				continue
+		lhs, rhs := alignOrderedSets(result, set)
+
+		i := 0
+		j := 0
+		buffer := []int{}
+		for {
+			if i >= len(lhs) || j >= len(rhs) {
+				break
 			}
-			for _, rhsVal := range rhs {
-				if lhsVal == rhsVal {
-					resultBuffer = append(resultBuffer, rhsVal)
-				}
+
+			if lhs[i] < rhs[j] {
+				i++
+			} else if lhs[i] == rhs[j] {
+				buffer = append(buffer, lhs[i])
+				i++
+				j++
+			} else {
+				j++
 			}
 		}
-		result = resultBuffer
+		result = buffer
 	}
 	return result
 }
 
 func Difference(sets [][]int) []int {
-	result := []int{}
-	for setIndex, set := range sets {
-		// intersection with empty set
-		if len(set) == 0 {
-			return []int{}
-		}
+	if len(sets) == 1 {
+		return sets[0]
+	}
 
-		// initialize result with first set
-		if setIndex == 0 {
+	result := []int{}
+	for setIn, set := range sets {
+		if setIn == 0 {
 			result = set
+			if len(result) == 0 {
+				return []int{}
+			}
+			continue
+		}
+		if len(set) == 0 {
 			continue
 		}
 
-		// Place ordered sets in order so we don't have to sort them later
 		lhs, rhs := result, set
-		if lhs[0] > rhs[0] {
-			lhs, rhs = rhs, lhs
+
+		i := 0
+		j := 0
+		buffer := []int{}
+		for {
+			if i >= len(lhs) || j >= len(rhs) {
+				break
+			}
+
+			if lhs[i] < rhs[j] {
+				buffer = append(buffer, lhs[i])
+				i++
+			} else if lhs[i] == rhs[j] {
+				i++
+				j++
+			} else {
+				j++
+			}
 		}
-		resultBuffer := []int{}
-		for _, lhsVal := range lhs {
-			if lhsVal < rhs[0] {
-				resultBuffer = append(resultBuffer, lhsVal)
+
+		for {
+			if i >= len(lhs) {
+				break
 			}
-			if lhsVal > rhs[len(rhs)-1] {
-				resultBuffer = append(resultBuffer, lhsVal)
-			}
-			for _, rhsVal := range rhs {
-				if lhsVal == rhsVal {
-					continue
-				}
-			}
+			buffer = append(buffer, lhs[i])
+			i++
 		}
-		result = resultBuffer
+
+		result = buffer
 	}
 	return result
 }

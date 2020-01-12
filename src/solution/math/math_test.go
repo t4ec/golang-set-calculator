@@ -17,6 +17,18 @@ var unionTests = []testpair{
 		result: []int{1, 2, 3, 4, 6},
 	},
 	{
+		sets:   [][]int{[]int{}, []int{1, 10}, []int{2, 3, 4}},
+		result: []int{1, 2, 3, 4, 10},
+	},
+	{
+		sets:   [][]int{[]int{2, 3, 4}, []int{1, 10}},
+		result: []int{1, 2, 3, 4, 10},
+	},
+	{
+		sets:   [][]int{[]int{2, 3, 4}, []int{1, 3, 10}},
+		result: []int{1, 2, 3, 4, 10},
+	},
+	{
 		sets:   [][]int{[]int{}, []int{3, 4}, []int{1, 2, 3}},
 		result: []int{1, 2, 3, 4},
 	},
@@ -32,12 +44,36 @@ var unionTests = []testpair{
 		sets:   [][]int{[]int{6}, []int{1}, []int{10}},
 		result: []int{1, 6, 10},
 	},
+	{
+		sets:   [][]int{[]int{}, []int{}},
+		result: []int{},
+	},
 }
 
 var intersectionTests = []testpair{
 	{
 		sets:   [][]int{[]int{1, 2, 3, 4}, []int{2, 3, 4}},
 		result: []int{2, 3, 4},
+	},
+	{
+		sets:   [][]int{[]int{2, 3, 4}, []int{1, 2, 3, 4}},
+		result: []int{2, 3, 4},
+	},
+	{
+		sets:   [][]int{[]int{1}, []int{2}},
+		result: []int{},
+	},
+	{
+		sets:   [][]int{[]int{2, 3, 4, 5}, []int{2, 3, 4}},
+		result: []int{2, 3, 4},
+	},
+	{
+		sets:   [][]int{[]int{1, 2, 3, 4}, []int{2, 3}},
+		result: []int{2, 3},
+	},
+	{
+		sets:   [][]int{[]int{2, 3}, []int{1, 2, 3, 4}},
+		result: []int{2, 3},
 	},
 	{
 		sets:   [][]int{[]int{1, 2, 3, 4}, []int{2, 3, 4}, []int{3, 4, 5}},
@@ -49,6 +85,10 @@ var intersectionTests = []testpair{
 	},
 	{
 		sets:   [][]int{[]int{}, []int{1, 2}},
+		result: []int{},
+	},
+	{
+		sets:   [][]int{[]int{1, 2}, []int{}},
 		result: []int{},
 	},
 	{
@@ -67,8 +107,24 @@ var differenceTests = []testpair{
 		result: []int{1, 4},
 	},
 	{
+		sets:   [][]int{[]int{2, 3}, []int{1, 2, 3, 4}},
+		result: []int{},
+	},
+	{
+		sets:   [][]int{[]int{1}, []int{2}},
+		result: []int{1},
+	},
+	{
+		sets:   [][]int{[]int{2, 3, 4}, []int{0, 1, 2, 5, 6}},
+		result: []int{3, 4},
+	},
+	{
 		sets:   [][]int{[]int{1, 2, 3, 4}, []int{2, 3, 4}, []int{3, 4, 5}},
 		result: []int{1},
+	},
+	{
+		sets:   [][]int{[]int{1, 2, 3}, []int{4, 5, 6}},
+		result: []int{1, 2, 3},
 	},
 	{
 		sets:   [][]int{[]int{1, 2, 3}, []int{1, 2, 3}},
@@ -77,6 +133,10 @@ var differenceTests = []testpair{
 	{
 		sets:   [][]int{[]int{}, []int{1, 2}},
 		result: []int{},
+	},
+	{
+		sets:   [][]int{[]int{1, 2}, []int{}, []int{2}},
+		result: []int{1},
 	},
 	{
 		sets:   [][]int{[]int{6}},
