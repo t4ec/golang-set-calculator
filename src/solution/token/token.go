@@ -1,3 +1,5 @@
+// Copyright 2020, Dmytrii Sinko, All rights reserved.
+
 package token
 
 type Token struct {
