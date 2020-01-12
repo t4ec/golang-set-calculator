@@ -47,11 +47,11 @@ func (n ASTOperatorNode) Evaluate() []int {
 }
 
 type ASTValueNode struct {
-	FileName string
+	Filepath string
 	Value    []int
 }
 
 func (n ASTValueNode) Evaluate() []int {
-	fmt.Printf("Evaluate value %v\n", n.FileName)
+	fmt.Printf("Evaluate value %v\n", n.Value)
 	return n.Value
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"solution/ast"
+	"solution/files"
 	"solution/lexer"
 	"solution/token"
 )
@@ -18,8 +19,7 @@ func NewParser(text string) Parser {
 }
 
 func (p *Parser) Parse() (ast.ASTNode, error) {
-	astNode, err := p.parseOperator()
-	return astNode, err
+	return p.parseOperator()
 }
 
 func (p *Parser) parseOperator() (ast.ASTNode, error) {
@@ -29,7 +29,7 @@ func (p *Parser) parseOperator() (ast.ASTNode, error) {
 	case token.LBRACKET:
 		astNode, err := p.parseOperator()
 		if err != nil {
-			return ast.ASTOperatorNode{}, fmt.Errorf("failed parsing Operator: %v", err)
+			return ast.ASTOperatorNode{}, fmt.Errorf("failed parsing operator:\n%v", err)
 		}
 		return astNode, nil
 	case token.WORD:
@@ -56,11 +56,15 @@ func (p *Parser) parseOperands() ([]ast.ASTNode, error) {
 		case token.LBRACKET:
 			astNode, err := p.parseOperator()
 			if err != nil {
-				return []ast.ASTNode{}, fmt.Errorf("invalid operator formatting:\n%v", t.Value)
+				return []ast.ASTNode{}, fmt.Errorf("invalid operator formatting:\n%v", err)
 			}
 			operands = append(operands, astNode)
 		case token.WORD:
-			astNode := ast.ASTValueNode{FileName: t.Value}
+			value, err := files.GetIntArray(t.Value)
+			if err != nil {
+				return []ast.ASTNode{}, fmt.Errorf("could not read file \"%v\":\n%v", t.Value, err)
+			}
+			astNode := ast.ASTValueNode{Filepath: t.Value, Value: value}
 			operands = append(operands, astNode)
 		case token.RBRACKET:
 			return operands, nil
