@@ -21,7 +21,11 @@ func main() {
 		fmt.Printf("failed parsing expression:\n%v", err)
 		return
 	}
-	result := ast.Evaluate()
+	result, err := ast.Evaluate()
+	if err != nil {
+		fmt.Printf("failed evaluating AST:\n%v", err)
+		return
+	}
 	for _, element := range result {
 		fmt.Println(element)
 	}

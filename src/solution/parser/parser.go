@@ -24,7 +24,6 @@ func (p *Parser) Parse() (ast.ASTNode, error) {
 
 func (p *Parser) parseOperator() (ast.ASTNode, error) {
 	t := p.Lexer.NextToken()
-	// fmt.Printf("parseOperator, token value: \"%v\", token type: \"%v\"\n", t.Value, t.Type)
 	switch t.Type {
 	case token.LBRACKET:
 		astNode, err := p.parseOperator()
@@ -51,7 +50,6 @@ func (p *Parser) parseOperands() ([]ast.ASTNode, error) {
 	var operands []ast.ASTNode
 	for {
 		t := p.Lexer.NextToken()
-		// fmt.Printf("parseOperands, token: \"%v\", token type: \"%v\"\n", t.Value, t.Type)
 		switch t.Type {
 		case token.LBRACKET:
 			astNode, err := p.parseOperator()

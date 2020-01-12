@@ -57,7 +57,7 @@ func (l *Lexer) readWord() string {
 	chars := []rune{}
 	for {
 		switch l.char {
-		case ' ', '\n', '\t', '[', ']':
+		case ' ', '\n', '\t', '[', ']', 0:
 			return string(chars)
 		default:
 			chars = append(chars, l.char)

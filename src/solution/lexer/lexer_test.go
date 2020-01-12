@@ -25,6 +25,15 @@ var tests = []testpair{
 			token.Token{Value: "]", Type: token.RBRACKET},
 		},
 	},
+	{
+		"[ SUM b.txt c.txt",
+		[]token.Token{
+			token.Token{Value: "[", Type: token.LBRACKET},
+			token.Token{Value: "SUM", Type: token.WORD},
+			token.Token{Value: "b.txt", Type: token.WORD},
+			token.Token{Value: "c.txt", Type: token.WORD},
+		},
+	},
 }
 
 func TestLexer(t *testing.T) {
