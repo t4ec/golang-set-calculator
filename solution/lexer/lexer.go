@@ -28,7 +28,7 @@ func (l *Lexer) readChar() {
 func (l *Lexer) skipWhitespaces() {
 	for {
 		switch l.char {
-		case ' ', '\n', '\t':
+		case ' ', '\n', '\t', '\r':
 			l.readChar()
 		default:
 			return
@@ -37,8 +37,8 @@ func (l *Lexer) skipWhitespaces() {
 }
 
 func (l *Lexer) NextToken() token.Token {
-	l.skipWhitespaces()
 	l.readChar()
+	l.skipWhitespaces()
 	switch l.char {
 	case '[':
 		return token.Token{Type: token.LBRACKET, Value: string(l.char)}
