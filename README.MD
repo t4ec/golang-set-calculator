@@ -1,6 +1,6 @@
 # What is this
 
-This is test assignment of Dmytrii Sinko for 2021.ai
+This is test assignment
 
 ## Build
 ```
